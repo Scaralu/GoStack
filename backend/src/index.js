@@ -7,7 +7,33 @@ app.use(express.json());
 
 const projects = [];
 
-app.get('/projects', (request, response) => {
+function validateProjectId(request, response, next){
+    const {id} = request.params;
+
+    if(!isUuid (id)){
+        return response.status(400).json({
+            error: 'Invalid project Id'
+        })
+    }
+    
+    return next;
+}
+
+function logRequests(request, response, next){
+    const {method, url} = request;
+    const logLabel = `[${method.toUpperCase()} ${url}]`
+
+    console.time(logRequests);
+
+    next();
+
+    console.timeEnd(logRequests);
+}
+
+app.use(logRequests);
+app.use('/projects/:id', validateProjectId)
+
+app.get('/projects', logRequests, (request, response) => {
     const {title} = request.query;
     const results = title 
         ? projects.filter(project => project.title.includes(title))
@@ -16,7 +42,7 @@ app.get('/projects', (request, response) => {
     return response.json(results);
 });
 
-app.post('/projects', (request, response) => {
+app.post('/projects', logRequests, (request, response) => {
     
     const {title, owner} = request.body;
     const project = {id: uuid(), title, owner};
