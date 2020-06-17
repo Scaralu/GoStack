@@ -1,7 +1,15 @@
 const express = require('express');
 const app = express();
 
+app.use(express.json());
+
 app.get('/projects', (request, response) => {
+
+    const {title, owner} = request.query;
+
+    console.log(title);
+    console.log(owner);
+
     return response.json({
         "projects": [
             'Sapphire',
@@ -12,6 +20,13 @@ app.get('/projects', (request, response) => {
 });
 
 app.post('/projects', (request, response) => {
+    
+    const {title, owner} = request.body;
+
+    console.log(title);
+    console.log(owner);
+
+
     return response.json({
         "projects": [
             'Sapphire',
@@ -23,6 +38,11 @@ app.post('/projects', (request, response) => {
 })
 
 app.put('/projects/:id', (request, response) => {
+    
+    const routeParam = request.params;
+
+    console.log(routeParam);
+    
     return response.json({
         "projects": [
             'Sapphire 2.0',
