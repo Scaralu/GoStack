@@ -1,3 +1,9 @@
-import {sum} from './sum.js';
+import React from 'react';
+import { render } from 'react-dom';
+import App from './App';
+import Header from './components/Header';
 
-console.log(sum(3, 6)); 
+render(
+    <App />,
+    document.getElementById("app")
+);
